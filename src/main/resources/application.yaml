@@ -1,0 +1,6 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27023/jwt_security
+      auto-index-creation: true
+      database: jwt_security
