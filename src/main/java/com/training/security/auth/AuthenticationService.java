@@ -7,6 +7,7 @@ import com.training.security.dto.TokenDTO;
 import com.training.security.entity.Role;
 import com.training.security.entity.User;
 import com.training.security.repository.UserRepository;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -39,6 +40,20 @@ public class AuthenticationService {
                 request.getEmail(),
                 request.getPassword()));
         var user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow();
+        var jwtToken = jwtService.generateToken(user);
+        var jwtRefreshToken = jwtService.generateRefreshToken(user);
+        return TokenDTO.builder()
+                .token(jwtToken)
+                .refreshToken(jwtRefreshToken)
+                .build();
+    }
+
+    public TokenDTO refreshToken(String refreshToken) {
+        String newToken = refreshToken.substring(7);
+        String userEmail = jwtService.extractClaim(newToken, Claims::getSubject);
+
+        var user = userRepository.findByEmail(userEmail)
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         var jwtRefreshToken = jwtService.generateRefreshToken(user);

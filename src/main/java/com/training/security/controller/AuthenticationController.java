@@ -6,10 +6,7 @@ import com.training.security.auth.AuthenticationService;
 import com.training.security.dto.RegisterDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,5 +23,10 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<TokenDTO> login(@RequestBody LoginDTO request) {
         return ResponseEntity.ok(authService.login(request));
+    }
+
+    @GetMapping("/token")
+    public ResponseEntity<TokenDTO> refreshToken(@RequestHeader("Authorization") String refreshToken) {
+        return ResponseEntity.ok(authService.refreshToken(refreshToken));
     }
 }
