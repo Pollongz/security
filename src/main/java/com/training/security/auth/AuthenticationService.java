@@ -1,10 +1,8 @@
 package com.training.security.auth;
 
-import com.training.security.config.JwtService;
 import com.training.security.dto.LoginDTO;
 import com.training.security.dto.RegisterDTO;
 import com.training.security.dto.TokenDTO;
-import com.training.security.entity.Role;
 import com.training.security.entity.User;
 import com.training.security.repository.UserRepository;
 import io.jsonwebtoken.Claims;
@@ -29,7 +27,7 @@ public class AuthenticationService {
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER.toString())
+                .roles(request.getRoles())
                 .build();
 
         userRepository.save(user);

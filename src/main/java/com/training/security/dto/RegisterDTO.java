@@ -2,6 +2,8 @@ package com.training.security.dto;
 
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -12,5 +14,5 @@ public class RegisterDTO {
     private String lastName;
     private String email;
     private String password;
-    private String role;
+    private List<String> roles;
 }
