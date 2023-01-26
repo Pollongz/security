@@ -1,4 +1,4 @@
-package com.training.security.config;
+package com.training.security.auth;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
