@@ -5,9 +5,12 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.codec.Hex;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.Charset;
 import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -19,7 +22,6 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    private static final String SECRET_KEY = "294A404E635266556A576E5A7234753778214125442A472D4B6150645367566B";
     public String extractUserEmail(String jwtToken) {
         return extractClaim(jwtToken, Claims::getSubject);
     }
@@ -84,7 +86,13 @@ public class JwtService {
     }
 
     private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        byte[] keyBytes = Decoders.BASE64.decode(getSecretKey());
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    private String getSecretKey() {
+        String key = RandomStringUtils.random(32, true, true);
+        char[] encryptedKey = Hex.encode(key.getBytes(Charset.defaultCharset()));
+        return String.valueOf(encryptedKey);
     }
 }
